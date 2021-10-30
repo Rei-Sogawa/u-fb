@@ -4,6 +4,7 @@
   "license": "MIT",
   "devDependencies": {
     "fs-extra": "^10.0.0",
+    "rimraf": "^3.0.2",
     "tsc-alias": "^1.4.0",
     "typescript": "^4.4.4"
   },
@@ -12,6 +13,7 @@
     "firebase-admin": "^10.0.0"
   },
   "scripts": {
+    "prebuild": "rimraf lib",
     "build": "yarn build:web && yarn build:admin",
     "build:web": "tsc && tsc-alias",
     "prebuild:admin": "node ./pre-build-admin.js",

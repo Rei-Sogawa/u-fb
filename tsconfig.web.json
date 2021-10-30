@@ -5,8 +5,8 @@
     "outDir": "./lib/web",
     "baseUrl": ".",
     "paths": {
-      "types": ["./types/web"]
+      "u": ["./u/web"]
     }
   },
-  "include": ["src", "types/web"]
+  "include": ["src", "u/web"]
 }
