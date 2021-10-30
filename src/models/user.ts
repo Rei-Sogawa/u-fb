@@ -23,17 +23,21 @@ export class User implements IUser {
   readonly createdAt: Timestamp;
   readonly updatedAt: Timestamp;
 
-  get toData(): UserData {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { id, ref, ...data } = this;
-    return data;
-  }
-
   constructor({ id, ref, name, createdAt, updatedAt }: IUser) {
     this.id = id;
     this.ref = ref;
     this.name = name;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
+  }
+
+  toData(): UserData {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { id, ref, ...data } = this;
+    return data;
+  }
+
+  validate(): boolean {
+    return this.name.length < 255;
   }
 }
