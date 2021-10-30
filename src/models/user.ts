@@ -1,4 +1,4 @@
-import { DocumentReference, Timestamp, WithIdAndRef, createConverter } from "u";
+import { createConverter, DocumentReference, Timestamp, WithIdAndRef } from "u";
 
 export type UserData = {
   createdAt: Timestamp;
