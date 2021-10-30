@@ -9,15 +9,25 @@ export type UserData = {
 export type IUser = WithIdAndRef<UserData>;
 
 export class User implements IUser {
-  id: string;
-  ref: DocumentReference;
-  name: string;
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
+  static readonly converter = createConverter<UserData>();
+  static collectionPath = () => {
+    return "users";
+  };
+  static docPath = ({ userId }: { userId: string }) => {
+    return `users/${userId}`;
+  };
 
-  static collectionPath = () => "users";
-  static docPath = ({ userId }: { userId: string }) => `users/${userId}`;
-  static converter = createConverter<UserData>();
+  readonly id: string;
+  readonly ref: DocumentReference;
+  readonly name: string;
+  readonly createdAt: Timestamp;
+  readonly updatedAt: Timestamp;
+
+  get toData(): UserData {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { id, ref, ...data } = this;
+    return data;
+  }
 
   constructor({ id, ref, name, createdAt, updatedAt }: IUser) {
     this.id = id;
@@ -25,13 +35,5 @@ export class User implements IUser {
     this.name = name;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
-  }
-
-  get typedRef() {
-    return this.ref.withConverter(User.converter);
-  }
-
-  validate() {
-    return this.name.length < 25;
   }
 }
