@@ -5,26 +5,26 @@ export type UserData = {
   updatedAt: Timestamp;
 };
 
-export type IUserModel = WithIdAndRef<UserData>;
+export type IUser = WithIdAndRef<UserData>;
 
-export class UserModel {
+export class User implements IUser {
   id: string;
   ref: DocumentReference;
   createdAt: Timestamp;
   updatedAt: Timestamp;
 
-  constructor({ id, ref, createdAt, updatedAt }: IUserModel) {
+  static collectionPath = () => "users";
+  static docPath = ({ userId }: { userId: string }) => `users/${userId}`;
+  static converter = createConverter<UserData>();
+
+  constructor({ id, ref, createdAt, updatedAt }: IUser) {
     this.id = id;
     this.ref = ref;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
 
-  static collectionPath() {
-    return "users";
-  }
-
-  static get converter() {
-    return createConverter<UserData>();
+  get typedRef() {
+    return this.ref.withConverter(User.converter);
   }
 }
