@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "module": "esnext",
+    "outDir": "./lib/es",
+    "baseUrl": ".",
+    "paths": {
+      "typings": ["./typings/browser"]
+    }
+  },
+  "include": ["typings/browser/**/*", "src/**/*"]
+}
