@@ -20,7 +20,7 @@ export class UserModel {
     this.updatedAt = updatedAt;
   }
 
-  static get collectionPath() {
+  static collectionPath() {
     return "users";
   }
 
