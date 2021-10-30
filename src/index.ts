@@ -1,4 +1,4 @@
-import { Timestamp } from "typings";
+import { Timestamp } from "types";
 
 export type User = {
   createdAt: Timestamp;

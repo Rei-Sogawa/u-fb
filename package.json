@@ -1,9 +1,21 @@
 {
   "name": "share-schema",
   "version": "1.0.0",
-  "main": "index.js",
   "license": "MIT",
   "devDependencies": {
+    "fs-extra": "^10.0.0",
+    "tsc-alias": "^1.4.0",
     "typescript": "^4.4.4"
+  },
+  "dependencies": {
+    "firebase": "^9.2.0",
+    "firebase-admin": "^10.0.0"
+  },
+  "scripts": {
+    "build": "yarn build:web && yarn build:admin",
+    "build:web": "tsc && tsc-alias",
+    "prebuild:admin": "node ./pre-build-admin.js",
+    "build:admin": "tsc && tsc-alias",
+    "postbuild:admin": "node ./post-build-admin.js"
   }
 }
