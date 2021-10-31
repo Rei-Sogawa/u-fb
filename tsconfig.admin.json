@@ -5,7 +5,7 @@
     "outDir": "./lib/admin",
     "baseUrl": ".",
     "paths": {
-      "u": ["./u/admin"]
+      "@u": ["./u/admin"]
     }
   },
   "include": ["src", "u/admin"]

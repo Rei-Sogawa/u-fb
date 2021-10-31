@@ -1,4 +1,4 @@
-import { createConverter, DocumentReference, Timestamp, WithIdAndRef } from "u";
+import { createConverter, DocumentReference, Timestamp, WithIdAndRef } from "@u";
 
 export type UserData = {
   name: string;
