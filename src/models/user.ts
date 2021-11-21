@@ -1,4 +1,12 @@
-import { createConverter, DocumentReference, Timestamp, WithIdAndRef } from "@u";
+import {
+  createConverter,
+  DocumentReference,
+  Timestamp,
+  WithIdAndRef,
+  createTypedCollectionRef,
+  Firestore,
+  createTypedDocRef,
+} from "@u";
 
 export type UserData = {
   name: string;
@@ -15,6 +23,12 @@ export class User implements IUser {
   };
   static docPath = ({ userId }: { userId: string }) => {
     return `users/${userId}`;
+  };
+  static typedCollectionRef = (db: Firestore) => {
+    return createTypedCollectionRef(db, this.collectionPath(), this.converter);
+  };
+  static typedDocRef = (db: Firestore, { userId }: { userId: string }) => {
+    return createTypedDocRef(db, this.docPath({ userId }), this.converter);
   };
 
   readonly id: string;
