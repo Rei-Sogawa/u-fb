@@ -32,7 +32,6 @@ export class User implements IUser {
   }
 
   toData(): UserData {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { id, ref, ...data } = this;
     return data;
   }
