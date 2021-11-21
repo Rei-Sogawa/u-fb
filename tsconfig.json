@@ -1,3 +1,4 @@
 {
+  // NOTE: for VSCode
   "extends": "./tsconfig.web.json"
 }
