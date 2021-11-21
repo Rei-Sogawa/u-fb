@@ -1,11 +1,21 @@
 {
-  "name": "share-schema",
+  "name": "u-fb",
   "version": "1.0.0",
   "license": "MIT",
   "type": "module",
   "exports": {
     "./admin": "./lib/admin/src/index.js",
     "./web": "./lib/web/src/index.js"
+  },
+  "typesVersions": {
+    "*": {
+      "admin": [
+        "./lib/admin/src/index.d.ts"
+      ],
+      "web": [
+        "./lib/web/src/index.d.ts"
+      ]
+    }
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.2.0",
