@@ -6,7 +6,7 @@ import {
   Timestamp,
 } from "firebase-admin/firestore";
 
-export { DocumentReference, Firestore, Timestamp };
+export { DocumentReference, Firestore, FirestoreDataConverter, Timestamp };
 
 export type WithIdAndRef<Data> = { id: string; ref: DocumentReference } & Data;
 

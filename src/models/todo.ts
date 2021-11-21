@@ -1,5 +1,6 @@
 import { createConverter, DocumentReference, Timestamp, WithIdAndRef } from "@u";
-import { User, UserData } from "src";
+import { User } from "src";
+import { createTypedFirestore } from "src/helper/create-typed-firestore";
 
 export type TodoData = {
   title: string;
@@ -15,13 +16,11 @@ export type TodoData = {
 export type ITodo = WithIdAndRef<TodoData>;
 
 export class Todo implements ITodo {
-  static readonly converter = createConverter<UserData>();
-  static collectionPath = () => {
-    return "todos";
-  };
-  static docPath = ({ todoId }: { todoId: string }) => {
-    return `todos/${todoId}`;
-  };
+  static readonly firestore = createTypedFirestore({
+    converter: createConverter<TodoData>(),
+    collectionPath: () => "todos",
+    docPath: ({ todoId }: { todoId: string }) => `todos/${todoId}`,
+  });
 
   readonly id: string;
   readonly ref: DocumentReference;

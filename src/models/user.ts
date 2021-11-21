@@ -1,12 +1,5 @@
-import {
-  createConverter,
-  DocumentReference,
-  Timestamp,
-  WithIdAndRef,
-  createTypedCollectionRef,
-  Firestore,
-  createTypedDocRef,
-} from "@u";
+import { createConverter, DocumentReference, Timestamp, WithIdAndRef } from "@u";
+import { createTypedFirestore } from "src/helper/create-typed-firestore";
 
 export type UserData = {
   name: string;
@@ -17,19 +10,11 @@ export type UserData = {
 export type IUser = WithIdAndRef<UserData>;
 
 export class User implements IUser {
-  static readonly converter = createConverter<UserData>();
-  static collectionPath = () => {
-    return "users";
-  };
-  static docPath = ({ userId }: { userId: string }) => {
-    return `users/${userId}`;
-  };
-  static typedCollectionRef = (db: Firestore) => {
-    return createTypedCollectionRef(db, this.collectionPath(), this.converter);
-  };
-  static typedDocRef = (db: Firestore, { userId }: { userId: string }) => {
-    return createTypedDocRef(db, this.docPath({ userId }), this.converter);
-  };
+  static readonly firestore = createTypedFirestore({
+    converter: createConverter<UserData>(),
+    collectionPath: () => "users",
+    docPath: ({ userId }: { userId: string }) => `users/${userId}`,
+  });
 
   readonly id: string;
   readonly ref: DocumentReference;
