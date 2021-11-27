@@ -15,12 +15,12 @@ export type UserData = {
   updatedAt: Timestamp;
 };
 
+type DefaultDataToReturn = Merge<UserData, { createdAt: FieldValue; updatedAt: FieldValue }>;
+
 export type IUser = WithIdAndRef<UserData>;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface User extends IUser {}
-
-type DefaultDataToReturn = Merge<UserData, { createdAt: FieldValue; updatedAt: FieldValue }>;
 
 export class User {
   static readonly convertor = createConverter<UserData>();

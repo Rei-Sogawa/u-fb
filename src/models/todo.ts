@@ -21,15 +21,15 @@ export type TodoData = {
   };
 };
 
-export type ITodo = WithIdAndRef<TodoData>;
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface Todo extends ITodo {}
-
 type DefaultDataToReturn = Omit<
   Merge<TodoData, { createdAt: FieldValue; updatedAt: FieldValue }>,
   "creator"
 >;
+
+export type ITodo = WithIdAndRef<TodoData>;
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface Todo extends ITodo {}
 
 export class Todo {
   static readonly converter = createConverter<TodoData>();
