@@ -1,5 +1,13 @@
-import { createConverter, DocumentReference, Timestamp, WithIdAndRef } from "@u";
-import { createTypedFirestore } from "src/helper/create-typed-firestore";
+import {
+  createConverter,
+  FieldValue,
+  Timestamp,
+  WithIdAndRef,
+  serverTimestamp,
+  createTypedCollectionRef,
+  createTypedDocRef,
+} from "@u";
+import { Merge } from "type-fest";
 
 export type UserData = {
   name: string;
@@ -9,33 +17,24 @@ export type UserData = {
 
 export type IUser = WithIdAndRef<UserData>;
 
-export class User implements IUser {
-  static readonly firestore = createTypedFirestore({
-    converter: createConverter<UserData>(),
-    collectionPath: () => "users",
-    docPath: ({ userId }: { userId: string }) => `users/${userId}`,
+export interface User extends IUser {}
+
+type DefaultDataToReturn = Merge<UserData, { createdAt: FieldValue; updatedAt: FieldValue }>;
+
+export class User {
+  static readonly convertor = createConverter<UserData>();
+  static readonly collectionPath = () => "users";
+  static readonly docPath = ({ userId }: { userId: string }) => `users/${userId}`;
+  static readonly collectionRef = createTypedCollectionRef(this.collectionPath, this.convertor);
+  static readonly docRef = createTypedDocRef(this.docPath, this.convertor);
+
+  static readonly defaultDataTo = (): DefaultDataToReturn => ({
+    name: "",
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
   });
 
-  readonly id: string;
-  readonly ref: DocumentReference;
-  readonly name: string;
-  readonly createdAt: Timestamp;
-  readonly updatedAt: Timestamp;
-
-  constructor({ id, ref, name, createdAt, updatedAt }: IUser) {
-    this.id = id;
-    this.ref = ref;
-    this.name = name;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
-  }
-
-  toData(): UserData {
-    const { id, ref, ...data } = this;
-    return data;
-  }
-
-  validate(): boolean {
-    return this.name.length < 255;
+  constructor(init: IUser) {
+    Object.assign(this, init);
   }
 }

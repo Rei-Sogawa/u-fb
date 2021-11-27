@@ -1,6 +1,14 @@
-import { createConverter, DocumentReference, Timestamp, WithIdAndRef } from "@u";
+import {
+  createConverter,
+  createTypedCollectionRef,
+  createTypedDocRef,
+  FieldValue,
+  serverTimestamp,
+  Timestamp,
+  WithIdAndRef,
+} from "@u";
 import { User } from "src";
-import { createTypedFirestore } from "src/helper/create-typed-firestore";
+import { Merge } from "type-fest";
 
 export type TodoData = {
   title: string;
@@ -15,36 +23,30 @@ export type TodoData = {
 
 export type ITodo = WithIdAndRef<TodoData>;
 
+export interface Todo extends ITodo {}
+
+// NOTE: relation は default 値を設定できない
+type DefaultDataToReturn = Omit<
+  Merge<TodoData, { createdAt: FieldValue; updatedAt: FieldValue }>,
+  "creator"
+>;
+
 export class Todo implements ITodo {
-  static readonly firestore = createTypedFirestore({
-    converter: createConverter<TodoData>(),
-    collectionPath: () => "todos",
-    docPath: ({ todoId }: { todoId: string }) => `todos/${todoId}`,
+  static readonly converter = createConverter<TodoData>();
+  static readonly collectionPath = ({ userId }: { userId: string }) => `users/${userId}/todos`;
+  static readonly docPath = ({ userId, todoId }: { userId: string; todoId: string }) =>
+    `users/${userId}/todos/${todoId}`;
+  static readonly collectionRef = createTypedCollectionRef(this.collectionPath, this.converter);
+  static readonly docRef = createTypedDocRef(this.docPath, this.converter);
+
+  static readonly defaultDataTo = (): DefaultDataToReturn => ({
+    title: "",
+    completed: false,
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
   });
 
-  readonly id: string;
-  readonly ref: DocumentReference;
-  readonly title: string;
-  readonly completed: boolean;
-  readonly createdAt: Timestamp;
-  readonly updatedAt: Timestamp;
-  readonly creator: {
-    id: User["id"];
-    ref: User["ref"];
-  };
-
-  constructor({ id, ref, title, completed, createdAt, updatedAt, creator }: ITodo) {
-    this.id = id;
-    this.ref = ref;
-    this.title = title;
-    this.completed = completed;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
-    this.creator = creator;
-  }
-
-  toData(): TodoData {
-    const { id, ref, ...data } = this;
-    return data;
+  constructor(init: ITodo) {
+    Object.assign(this, init);
   }
 }
