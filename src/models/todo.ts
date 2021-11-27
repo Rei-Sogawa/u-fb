@@ -31,7 +31,7 @@ type DefaultDataToReturn = Omit<
   "creator"
 >;
 
-export class Todo implements ITodo {
+export class Todo {
   static readonly converter = createConverter<TodoData>();
   static readonly collectionPath = ({ userId }: { userId: string }) => `users/${userId}/todos`;
   static readonly docPath = ({ userId, todoId }: { userId: string; todoId: string }) =>
