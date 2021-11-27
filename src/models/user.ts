@@ -1,11 +1,11 @@
 import {
   createConverter,
-  FieldValue,
-  Timestamp,
-  WithIdAndRef,
-  serverTimestamp,
   createTypedCollectionRef,
   createTypedDocRef,
+  FieldValue,
+  serverTimestamp,
+  Timestamp,
+  WithIdAndRef,
 } from "@u";
 import { Merge } from "type-fest";
 
@@ -17,6 +17,7 @@ export type UserData = {
 
 export type IUser = WithIdAndRef<UserData>;
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface User extends IUser {}
 
 type DefaultDataToReturn = Merge<UserData, { createdAt: FieldValue; updatedAt: FieldValue }>;

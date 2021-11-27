@@ -1,22 +1,22 @@
 import {
-  DocumentData,
-  DocumentReference,
-  Firestore,
-  FirestoreDataConverter,
-  Timestamp,
   collection,
   doc,
-  serverTimestamp,
+  DocumentData,
+  DocumentReference,
   FieldValue,
+  Firestore,
+  FirestoreDataConverter,
+  serverTimestamp,
+  Timestamp,
 } from "firebase/firestore";
 
 export {
   DocumentReference,
+  FieldValue,
   Firestore,
   FirestoreDataConverter,
-  Timestamp,
   serverTimestamp,
-  FieldValue,
+  Timestamp,
 };
 
 export type WithIdAndRef<Data> = { id: string; ref: DocumentReference } & Data;
@@ -32,6 +32,7 @@ export const createConverter = <Data>(): FirestoreDataConverter<Data> => {
   };
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const createTypedCollectionRef = <Data, CollectionPath extends (...args: any) => string>(
   collectionPath: CollectionPath,
   converter: FirestoreDataConverter<Data>
@@ -41,6 +42,7 @@ export const createTypedCollectionRef = <Data, CollectionPath extends (...args: 
   };
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const createTypedDocRef = <Data, DocPath extends (...args: any) => string>(
   docPath: DocPath,
   converter: FirestoreDataConverter<Data>

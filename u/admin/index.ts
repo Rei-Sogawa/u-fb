@@ -1,21 +1,21 @@
 import {
   DocumentData,
   DocumentReference,
+  FieldValue,
   Firestore,
   FirestoreDataConverter,
   Timestamp,
-  FieldValue,
 } from "firebase-admin/firestore";
 
 const serverTimestamp = FieldValue.serverTimestamp;
 
 export {
   DocumentReference,
+  FieldValue,
   Firestore,
   FirestoreDataConverter,
-  Timestamp,
-  FieldValue,
   serverTimestamp,
+  Timestamp,
 };
 
 export type WithIdAndRef<Data> = { id: string; ref: DocumentReference } & Data;
@@ -31,6 +31,7 @@ export const createConverter = <Data>(): FirestoreDataConverter<Data> => {
   };
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const createTypedCollectionRef = <Data, CollectionPath extends (...args: any) => string>(
   collectionPath: CollectionPath,
   convertor: FirestoreDataConverter<Data>
@@ -40,6 +41,7 @@ export const createTypedCollectionRef = <Data, CollectionPath extends (...args: 
   };
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const createTypedDocRef = <Data, DocPath extends (...args: any) => string>(
   docPath: DocPath,
   converter: FirestoreDataConverter<Data>

@@ -23,9 +23,9 @@ export type TodoData = {
 
 export type ITodo = WithIdAndRef<TodoData>;
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface Todo extends ITodo {}
 
-// NOTE: relation は default 値を設定できない
 type DefaultDataToReturn = Omit<
   Merge<TodoData, { createdAt: FieldValue; updatedAt: FieldValue }>,
   "creator"
