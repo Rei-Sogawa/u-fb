@@ -5,7 +5,8 @@ import {
   Timestamp,
   WithIdAndRef,
 } from "@u";
-import { Todo } from "src";
+
+import { Todo } from "./todo";
 
 export type UserData = {
   name: string;
