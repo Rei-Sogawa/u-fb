@@ -5,11 +5,13 @@ import {
   Timestamp,
   WithIdAndRef,
 } from "@u";
+import { Todo } from "src";
 
 export type UserData = {
   name: string;
   createdAt: Timestamp;
   updatedAt: Timestamp;
+  todos: { id: Todo["id"]; ref: Todo["ref"] }[];
 };
 
 export type IUser = WithIdAndRef<UserData>;
