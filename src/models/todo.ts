@@ -39,10 +39,4 @@ export class Todo {
   constructor(init: ITodo) {
     Object.assign(this, init);
   }
-
-  toData() {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { id, ref, ...data } = this;
-    return data;
-  }
 }
