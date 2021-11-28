@@ -2,9 +2,12 @@ import {
   createConverter,
   createTypedCollectionRef,
   createTypedDocRef,
+  FieldValue,
+  serverTimestamp,
   Timestamp,
   WithIdAndRef,
 } from "@u";
+import { Merge } from "type-fest";
 
 import { Todo } from "./todo";
 
@@ -12,8 +15,9 @@ export type UserData = {
   name: string;
   createdAt: Timestamp;
   updatedAt: Timestamp;
-  todos: { id: Todo["id"]; ref: Todo["ref"] }[];
 };
+
+type DefaultData = Merge<UserData, { createdAt: FieldValue; updatedAt: FieldValue }>;
 
 export type IUser = WithIdAndRef<UserData>;
 
@@ -29,6 +33,12 @@ export class User {
   static readonly collectionRef = createTypedCollectionRef(this.collectionPath, this.convertor);
 
   static readonly docRef = createTypedDocRef(this.docPath, this.convertor);
+
+  static readonly defaultData = (): DefaultData => ({
+    name: "",
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
+  });
 
   constructor(init: IUser) {
     Object.assign(this, init);
