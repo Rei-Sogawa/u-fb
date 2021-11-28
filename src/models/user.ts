@@ -2,12 +2,9 @@ import {
   createConverter,
   createTypedCollectionRef,
   createTypedDocRef,
-  FieldValue,
-  serverTimestamp,
   Timestamp,
   WithIdAndRef,
 } from "@u";
-import { Merge } from "type-fest";
 
 export type UserData = {
   name: string;
@@ -15,27 +12,28 @@ export type UserData = {
   updatedAt: Timestamp;
 };
 
-type DefaultDataToReturn = Merge<UserData, { createdAt: FieldValue; updatedAt: FieldValue }>;
-
 export type IUser = WithIdAndRef<UserData>;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface User extends IUser {}
-
 export class User {
   static readonly convertor = createConverter<UserData>();
-  static readonly collectionPath = () => "users";
-  static readonly docPath = ({ userId }: { userId: string }) => `users/${userId}`;
-  static readonly collectionRef = createTypedCollectionRef(this.collectionPath, this.convertor);
-  static readonly docRef = createTypedDocRef(this.docPath, this.convertor);
 
-  static readonly defaultDataTo = (): DefaultDataToReturn => ({
-    name: "",
-    createdAt: serverTimestamp(),
-    updatedAt: serverTimestamp(),
-  });
+  static readonly collectionPath = () => "users";
+
+  static readonly docPath = ({ userId }: { userId: string }) => ["users", userId].join("/");
+
+  static readonly collectionRef = createTypedCollectionRef(this.collectionPath, this.convertor);
+
+  static readonly docRef = createTypedDocRef(this.docPath, this.convertor);
 
   constructor(init: IUser) {
     Object.assign(this, init);
+  }
+
+  toData() {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { id, ref, ...data } = this;
+    return data;
   }
 }

@@ -2,15 +2,12 @@ import {
   createConverter,
   createTypedCollectionRef,
   createTypedDocRef,
-  FieldValue,
-  serverTimestamp,
   Timestamp,
   WithIdAndRef,
 } from "@u";
 import { User } from "src";
-import { Merge } from "type-fest";
 
-export type Data = {
+export type TodoData = {
   title: string;
   completed: boolean;
   createdAt: Timestamp;
@@ -21,35 +18,30 @@ export type Data = {
   };
 };
 
-export type IModel = WithIdAndRef<Data>;
+export type ITodo = WithIdAndRef<TodoData>;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface Model extends IModel {}
-// export class Model {
-//   constructor(init: IModel) {
-//     Object.assign(this, init);
-//   }
-// }
+export interface Todo extends ITodo {}
+export class Todo {
+  static readonly converter = createConverter<TodoData>();
 
-export const converter = createConverter<Data>();
+  static readonly collectionPath = ({ userId }: { userId: string }) =>
+    ["users", userId, "todos"].join("/");
 
-export const collectionPath = ({ userId }: { userId: string }) => `users/${userId}/todos`;
+  static readonly docPath = ({ userId, todoId }: { userId: string; todoId: string }) =>
+    ["users", userId, "todos", todoId].join("/");
 
-export const docPath = ({ userId, todoId }: { userId: string; todoId: string }) =>
-  `users/${userId}/todos/${todoId}`;
+  static readonly collectionRef = createTypedCollectionRef(this.collectionPath, this.converter);
 
-export const collectionRef = createTypedCollectionRef(collectionPath, converter);
+  static readonly docRef = createTypedDocRef(this.docPath, this.converter);
 
-export const docRef = createTypedDocRef(docPath, converter);
+  constructor(init: ITodo) {
+    Object.assign(this, init);
+  }
 
-type DefaultDataToReturn = Omit<
-  Merge<Data, { createdAt: FieldValue; updatedAt: FieldValue }>,
-  "creator"
->;
-
-export const defaultDataTo = (): DefaultDataToReturn => ({
-  title: "",
-  completed: false,
-  createdAt: serverTimestamp(),
-  updatedAt: serverTimestamp(),
-});
+  toData() {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { id, ref, ...data } = this;
+    return data;
+  }
+}
